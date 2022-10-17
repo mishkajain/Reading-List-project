@@ -23,11 +23,13 @@ how I can reach my target can be very helpful in creating better habits.
 
 - As a user, I want to be able to add a book to my reading list 
 - As a user, I want to be able to view the list of books in my reading list
+- As a user, I want to be able to remove a book from my reading list
+- As a user, I want to be able to rate all the books from 1 to 5
+
+[comment]: <> (
 - As a user, I want to be able to make daily, weekly or monthly reading goals
 - As a user, I want to be able to set book specific targets
-- As a user, I want to be able to view how much progress I have made in 
-completing a goal/target
+- As a user, I want to be able to view how much progress I have made in
+  completing a goal/target
 - As a user, I want to be able to see how much I need to read per day to reach
-a target or complete a goal 
-- As a user, I want to be able to remove a book from my reading list
-- As a user, I want to be able to mark the books I liked or did not like 
+  a target or complete a goal )
