@@ -25,6 +25,8 @@ how I can reach my target can be very helpful in creating better habits.
 - As a user, I want to be able to view the list of books in my reading list
 - As a user, I want to be able to remove a book from my reading list
 - As a user, I want to be able to rate all the books from 1 to 5
+- As a user, I want to be able to save my reading list to file
+- As a user, I want to be able to load my reading list from file
 
 [comment]: <> (
 - As a user, I want to be able to make daily, weekly or monthly reading goals
