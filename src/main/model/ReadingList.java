@@ -64,11 +64,10 @@ public class ReadingList {
     public boolean contains(Book book) {
         boolean found = false;
         for (int i = 0; i < listOfBooks.size(); i++) {
-            if (listOfBooks.get(i).getBookName().equals(book.getBookName())) {
-                if (listOfBooks.get(i).getBookAuthor().equals(book.getBookAuthor())) {
-                    found = true;
-                    break;
-                }
+            if (listOfBooks.get(i).getBookName().equals(book.getBookName()) && listOfBooks.get(i).getBookAuthor()
+                    .equals(book.getBookAuthor())) {
+                found = true;
+                break;
             }
         }
         return found;
