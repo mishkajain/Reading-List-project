@@ -2,14 +2,14 @@ package model;
 
 import java.util.ArrayList;
 
-public class BookList {
+public class ReadingList {
     // Initialising an empty ArrayList with type Book called listOfBooks
     final ArrayList<Book> listOfBooks;
 
     private String list = "";
 
     // EFFECTS: Creates a new an empty ArrayList with type Book called listOfBooks
-    public BookList() {
+    public ReadingList() {
         listOfBooks = new ArrayList<>();
     }
 
@@ -18,7 +18,6 @@ public class BookList {
     public String addBook(Book book) {
         if (listOfBooks.contains(book)) {
             String bookAlreadyInList = "This book has already been added to your list";
-            ;
             return bookAlreadyInList;
         } else {
             listOfBooks.add(book);
@@ -40,7 +39,7 @@ public class BookList {
                     + listOfBooks.get(i).getBookAuthor()
                     + "\n" + "Status: " + listOfBooks.get(i).getBookStatus()
                     + "\n" + "Rating: " + listOfBooks.get(i).getBookRating()
-                    + "\n---------------------------------------\n";
+                    + "\n====================================\n";
         }
         return list;
     }
@@ -79,6 +78,9 @@ public class BookList {
         return listOfBooks.get(command);
     }
 
+    public int size() {
+        return listOfBooks.size();
+    }
 }
 
 

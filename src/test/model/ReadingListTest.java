@@ -7,18 +7,22 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-public class BookListTest {
-    private BookList bookList;
+public class ReadingListTest {
+    private ReadingList bookList;
     private Book book1;
     private Book book2;
     private Book book3;
+    private Book book4;
+    private Book book5;
 
     @BeforeEach
     void runBefore() {
-        bookList = new BookList();
+        bookList = new ReadingList();
         book1 = new Book("Pride and Prejudice", "Jane Austen", 480, 2, 4);
         book2 = new Book("1984", "George Orwell", 328, 1, 5);
         book3 = new Book("Harry Potter and the Deathly Hallows", "J.K Rowling", 607, 2, 5);
+        book4 = new Book("Harry Potter and the Prisoner of Azkaban", "J.K Rowling", 607, 2, 5);
+        book5 = new Book("Harry Potter and the Prisoner of Azkaban", "JK Rowling", 607, 2, 5);
     }
 
     @Test
@@ -49,6 +53,23 @@ public class BookListTest {
         bookList.addBook(book1);
 
         assertEquals(1, bookList.getNumberOfBooks());
+    }
+
+    @Test
+    void testAddBookWithDifferentNameSameAuthor() {
+        bookList.addBook(book3);
+        bookList.addBook(book4);
+
+        assertEquals(2, bookList.getNumberOfBooks());
+
+    }
+
+    @Test
+    void testAddBookWithSameNameDifferentAuthor() {
+        bookList.addBook(book4);
+        bookList.addBook(book5);
+
+        assertEquals(2, bookList.getNumberOfBooks());
     }
 
     @Test
@@ -85,7 +106,7 @@ public class BookListTest {
         assertEquals(book1.getBookName().concat(" by ").concat(book1.getBookAuthor()).concat("\n").
                         concat("Status: ".concat(book1.getBookStatus().concat("\n".concat("Rating: "
                                 .concat(String.valueOf(book1.getBookRating()) +
-                                 "\n---------------------------------------\n"))))),
+                                 "\n====================================\n"))))),
                 bookList.getListOfBooks());
 
         assertFalse(bookList.contains(book2));
@@ -119,11 +140,11 @@ public class BookListTest {
         assertEquals(book1.getBookName().concat(" by ").concat(book1.getBookAuthor()).concat("\n").
                 concat("Status: ".concat(book1.getBookStatus().concat("\n".concat("Rating: ".
                         concat(String.valueOf(book1.getBookRating()) +
-                                "\n---------------------------------------\n" +
+                                "\n====================================\n" +
                                 book2.getBookName().concat(" by ").concat(book2.getBookAuthor()).concat("\n").
                                         concat("Status: ".concat(book2.getBookStatus().concat("\n".concat("Rating: ".
                                                 concat(String.valueOf(book2.getBookRating()) +
-                                                        "\n---------------------------------------\n")))))))))),
+                                                        "\n====================================\n")))))))))),
                 bookList.getListOfBooks());
 
     }
@@ -134,6 +155,15 @@ public class BookListTest {
         bookList.addBook(book2);
 
         assertEquals(book2, bookList.get(1));
+    }
+
+    @Test
+    void testSize() {
+        assertEquals(0, bookList.size());
+
+        bookList.addBook(book1);
+        bookList.addBook(book2);
+        assertEquals(2, bookList.size());
     }
 
 }

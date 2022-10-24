@@ -1,15 +1,19 @@
+// Based on the supplied Teller example for CPSC 210 :
+// https://github.students.cs.ubc.ca/CPSC210/TellerApp.git
+
 package ui;
 
 import model.Book;
-import model.BookList;
+import model.ReadingList;
 
 import java.util.Scanner;
 
 public class ReadingListApp {
-    private BookList listOfBooks;
+    private ReadingList listOfBooks;
     private Book newBook;
     private Book book;
     private Scanner input;
+    private Scanner removeInput;
 
     public ReadingListApp() {
         runReadingList();
@@ -18,8 +22,9 @@ public class ReadingListApp {
     private void runReadingList() {
         boolean exit = false;
         String command;
+        Integer removecCommand;
         input = new Scanner(System.in);
-        System.out.println("Welcome to your Reading List!");
+        System.out.println("\nWelcome to your Reading List!");
 
         init();
 
@@ -28,7 +33,7 @@ public class ReadingListApp {
             command = input.next();
             command = command.toLowerCase();
 
-            if (command.equals("4")) {
+            if (command.equals("6")) {
                 exit = true;
             } else {
                 processCommand(command);
@@ -52,7 +57,7 @@ public class ReadingListApp {
     // MODIFIES: this
     // EFFECTS: initialises a new empty book list
     private void init() {
-        listOfBooks = new BookList();
+        listOfBooks = new ReadingList();
         input = new Scanner(System.in);
         input.useDelimiter("\n");
 
@@ -60,11 +65,13 @@ public class ReadingListApp {
 
     // EFFECTS: Displays a menu of options to the user
     private void displayMenu() {
-        System.out.println("\nSelect from:");
-        System.out.println("\n1. View reading list");
-        System.out.println("\n2. Add a book to your reading list");
-        System.out.println("\n3. Remove a book from your reading list");
-        System.out.println("\n4. Quit ReadingList\n");
+        System.out.println("Select from:");
+        System.out.println("    1. -> View reading list");
+        System.out.println("    2. -> Add a book to your reading list");
+        System.out.println("    3. -> Remove a book from your reading list");
+        System.out.println("    4. -> Save reading list to file");
+        System.out.println("    5. -> Load reading list from file");
+        System.out.println("    6. -> Quit ReadingList\n");
     }
 
     // EFFECTS: Prints the current reading list
@@ -81,24 +88,24 @@ public class ReadingListApp {
         Integer status;
         Integer rating;
 
-        System.out.println("Please enter the following details:\n");
-        System.out.println("Name: ");
+        System.out.println("Please enter the following details:");
+        System.out.print("Name: ");
         name = input.next();
-        System.out.println("Author:");
+        System.out.print("Author: ");
         author = input.next();
-        System.out.println("Number of pages:");
+        System.out.print("Number of pages: ");
         pages = input.nextInt();
-        System.out.println("Status:");
+        System.out.print("Status: ");
         status = input.nextInt();
-        System.out.println("Rating:");
+        System.out.print("Rating: ");
         rating = input.nextInt();
 
         newBook = new Book(name, author, pages, status, rating);
         if (listOfBooks.contains(newBook)) {
-            System.out.println("THIS BOOK IS ALREADY IN YOUR READING LIST!");
+            System.out.println("\nTHIS BOOK IS ALREADY IN YOUR READING LIST!\n");
         } else {
             listOfBooks.addBook(newBook);
-            System.out.println("BOOK HAS BEEN ADDED SUCCESSFULLY!");
+            System.out.println("\nBOOK HAS BEEN ADDED SUCCESSFULLY!\n");
         }
     }
 
@@ -110,11 +117,15 @@ public class ReadingListApp {
         command = input.nextInt() - 1;
         Book removingBook = listOfBooks.get(command);
         listOfBooks.removeBook(removingBook);
-        System.out.println("BOOK HAS BEEN REMOVED SUCCESSFULLY");
+        System.out.println("BOOK HAS BEEN REMOVED SUCCESSFULLY\n");
     }
 
     // EFFECTS: prints out all the books in the current list of books
     private void displayCurrentBookList() {
-        System.out.println("\nREADING LIST:\n\n" + listOfBooks.getListOfBooks());
+        if (listOfBooks.size() == 0) {
+            System.out.println("YOUR READING LIST IS EMPTY");
+        } else {
+            System.out.println("\nREADING LIST:\n" + listOfBooks.getListOfBooks());
+        }
     }
 }
