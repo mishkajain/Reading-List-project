@@ -49,22 +49,44 @@ public class JsonWriterTest extends JsonTest{
     }
 
     @Test
-    void testNormalBookList() {
+    void testGeneralBookListWithOneBook() {
         try {
-
             BookList listOfBooks = new BookList();
             listOfBooks.addBook(new Book("1984", "George Orwell", 328, 1, 5));
-            listOfBooks.addBook(new Book("Pride and Prejudice", "Jane Austen", 480, 2, 4));
-            JsonWriter writer = new JsonWriter("./data/testNormalBookList.json");
+            JsonWriter writer = new JsonWriter("./data/testGeneralBookListWithOneBook.json");
             writer.open();
             writer.write(listOfBooks);
             writer.close();
 
-            JsonReader reader = new JsonReader("./data/testNormalBookList.json");
+            JsonReader reader = new JsonReader("./data/testGeneralBookListWithOneBook.json");
             listOfBooks = reader.read();
-            assertEquals(2, listOfBooks.getNumberOfBooks());
+            assertEquals(1, listOfBooks.getNumberOfBooks());
+            checkBook("1984", "George Orwell", 328, "New!", 5, listOfBooks.get(0));
+
+        } catch (IOException e) {
+            fail("Exception should not have been thrown");
+        }
+    }
+
+    @Test
+    void testGeneralBookListWithMultipleBooks() {
+        try {
+            BookList listOfBooks = new BookList();
+            listOfBooks.addBook(new Book("1984", "George Orwell", 328, 1, 5));
+            listOfBooks.addBook(new Book("Pride and Prejudice", "Jane Austen", 480, 2, 4));
+            listOfBooks.addBook(new Book("Harry Potter", "J.K Rowling", 607, 3, 5));
+            JsonWriter writer = new JsonWriter("./data/testGeneralBookListWithOneBook.json");
+            writer.open();
+            writer.write(listOfBooks);
+            writer.close();
+
+            JsonReader reader = new JsonReader("./data/testGeneralBookListWithOneBook.json");
+            listOfBooks = reader.read();
+            assertEquals(3, listOfBooks.getNumberOfBooks());
             checkBook("1984", "George Orwell", 328, "New!", 5, listOfBooks.get(0));
             checkBook("Pride and Prejudice", "Jane Austen", 480, "In progress...", 4, listOfBooks.get(1));
+            checkBook("Harry Potter", "J.K Rowling", 607, "Completed!", 5, listOfBooks.get(2));
+
 
         } catch (IOException e) {
             fail("Exception should not have been thrown");
