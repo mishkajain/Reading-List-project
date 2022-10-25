@@ -4,18 +4,25 @@
 package ui;
 
 import model.Book;
-import model.ReadingList;
+import model.BookList;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class ReadingListApp {
-    private ReadingList listOfBooks;
-    private Book newBook;
-    private Book book;
+    private static final String JSON_STORE = "./data/readingList.json";
     private Scanner input;
-    private Scanner removeInput;
+    private BookList listOfBooks;
+    private Book newBook;
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
 
-    public ReadingListApp() {
+    public ReadingListApp() throws FileNotFoundException {
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
         runReadingList();
     }
 
@@ -42,27 +49,6 @@ public class ReadingListApp {
         System.out.println("Goodbye! Come back soon :)");
     }
 
-    private void processCommand(String command) {
-        if (command.equals("1")) {
-            doViewList();
-        } else if (command.equals("2")) {
-            doAddBookToList();
-        } else if (command.equals("3")) {
-            doRemoveBookFromList(Integer.valueOf(command));
-        } else {
-            System.out.println("Selection not valid...\nPlease try again");
-        }
-    }
-
-    // MODIFIES: this
-    // EFFECTS: initialises a new empty book list
-    private void init() {
-        listOfBooks = new ReadingList();
-        input = new Scanner(System.in);
-        input.useDelimiter("\n");
-
-    }
-
     // EFFECTS: Displays a menu of options to the user
     private void displayMenu() {
         System.out.println("Select from:");
@@ -72,6 +58,30 @@ public class ReadingListApp {
         System.out.println("    4. -> Save reading list to file");
         System.out.println("    5. -> Load reading list from file");
         System.out.println("    6. -> Quit ReadingList\n");
+    }
+
+    private void processCommand(String command) {
+        if (command.equals("1")) {
+            doViewList();
+        } else if (command.equals("2")) {
+            doAddBookToList();
+        } else if (command.equals("3")) {
+            doRemoveBookFromList(Integer.valueOf(command));
+        } else if (command.equals("4")) {
+            saveReadingList();
+        } else if (command.equals("5")) {
+            loadReadingList();
+        } else {
+            System.out.println("Selection not valid...\nPlease try again");
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: initialises a new empty book list
+    private void init() {
+        listOfBooks = new BookList();
+        input = new Scanner(System.in);
+        input.useDelimiter("\n");
     }
 
     // EFFECTS: Prints the current reading list
@@ -119,6 +129,28 @@ public class ReadingListApp {
         listOfBooks.removeBook(removingBook);
         System.out.println("BOOK HAS BEEN REMOVED SUCCESSFULLY\n");
     }
+
+    private void saveReadingList() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(listOfBooks);
+            jsonWriter.close();
+            System.out.println("Saved Reading List to " + JSON_STORE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file: " + JSON_STORE);
+        }
+    }
+
+
+    private void loadReadingList() {
+        try {
+            listOfBooks = jsonReader.read();
+            System.out.println("Loaded Reading List from " + JSON_STORE);
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + JSON_STORE);
+        }
+    }
+
 
     // EFFECTS: prints out all the books in the current list of books
     private void displayCurrentBookList() {

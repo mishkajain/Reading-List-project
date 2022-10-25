@@ -1,8 +1,11 @@
 package model;
 
-public class Book {
+import org.json.JSONObject;
+import persistence.Writable;
+
+public class Book implements Writable {
     private String bookName;                // book name
-    private String bookAuthor;              // author of the book
+    private String bookAuthor;               // author of the book
     private Integer numOfPages;             // number of pages in the book
     private Integer bookStatus;             // status of the book ( 1: new, 2 : in progress, 3 : completed)
     private Integer bookRating;             // Rate the book out of 5
@@ -59,6 +62,17 @@ public class Book {
     // EFFECTS: returns the current rating of the book
     public Integer getBookRating() {
         return bookRating;
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", bookName);
+        json.put("author", bookAuthor);
+        json.put("pages", numOfPages);
+        json.put("status", bookStatus);
+        json.put("rating", bookRating);
+        return json;
     }
 
 }

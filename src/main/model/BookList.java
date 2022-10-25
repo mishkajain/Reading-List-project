@@ -1,22 +1,26 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.ArrayList;
 
-public class ReadingList {
+public class BookList implements Writable {
     // Initialising an empty ArrayList with type Book called listOfBooks
     final ArrayList<Book> listOfBooks;
-
     private String list = "";
 
     // EFFECTS: Creates a new an empty ArrayList with type Book called listOfBooks
-    public ReadingList() {
+    public BookList() {
         listOfBooks = new ArrayList<>();
     }
+
 
     // MODIFIES: this
     // EFFECTS: adds a Book object to the list of books
     public String addBook(Book book) {
-        if (listOfBooks.contains(book)) {
+        if (contains(book)) {
             String bookAlreadyInList = "This book has already been added to your list";
             return bookAlreadyInList;
         } else {
@@ -64,10 +68,11 @@ public class ReadingList {
     public boolean contains(Book book) {
         boolean found = false;
         for (int i = 0; i < listOfBooks.size(); i++) {
-            if (listOfBooks.get(i).getBookName().equals(book.getBookName()) && listOfBooks.get(i).getBookAuthor()
-                    .equals(book.getBookAuthor())) {
-                found = true;
-                break;
+            if (listOfBooks.get(i).getBookName().equals(book.getBookName())) {
+                if (listOfBooks.get(i).getBookAuthor().equals(book.getBookAuthor())) {
+                    found = true;
+                    break;
+                }
             }
         }
         return found;
@@ -79,6 +84,24 @@ public class ReadingList {
 
     public int size() {
         return listOfBooks.size();
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("listOfBooks", listOfBooksToJson());
+        return json;
+    }
+
+    // EFFECTS: returns things in this workroom as a JSON array
+    private JSONArray listOfBooksToJson() {
+        JSONArray jsonArray = new JSONArray();
+
+        for (Book book : listOfBooks) {
+            jsonArray.put(book.toJson());
+        }
+
+        return jsonArray;
     }
 }
 

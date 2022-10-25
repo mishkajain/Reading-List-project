@@ -7,32 +7,30 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-public class ReadingListTest {
-    private ReadingList bookList;
+public class BookListTest {
+    private BookList bookList;
     private Book book1;
     private Book book2;
     private Book book3;
     private Book book4;
     private Book book5;
+    private Book book6;
 
     @BeforeEach
     void runBefore() {
-        bookList = new ReadingList();
+        bookList = new BookList();
         book1 = new Book("Pride and Prejudice", "Jane Austen", 480, 2, 4);
         book2 = new Book("1984", "George Orwell", 328, 1, 5);
         book3 = new Book("Harry Potter and the Deathly Hallows", "J.K Rowling", 607, 2, 5);
         book4 = new Book("Harry Potter and the Prisoner of Azkaban", "J.K Rowling", 607, 2, 5);
         book5 = new Book("Harry Potter and the Prisoner of Azkaban", "JK Rowling", 607, 2, 5);
+        book6 = new Book("Harry Potter and the Prisoner of Azkaban", "JK Rowling", 607, 2, 5);
     }
 
     @Test
     void testAddBook() {
         bookList.addBook(book1);
         assertTrue(bookList.contains(book1));
-
-        assertEquals("Book has been added to your list", bookList.addBook(book2));
-        assertEquals("This book has already been added to your list", bookList.addBook(book1));
-
     }
 
     @Test
@@ -83,7 +81,7 @@ public class ReadingListTest {
     }
 
     @Test
-    void testContains() {
+    void testContainsBook() {
         bookList.addBook(book1);
         assertTrue(bookList.contains(book1));
 
@@ -91,10 +89,20 @@ public class ReadingListTest {
         bookList.addBook(book2);
         assertTrue(bookList.contains(book2));
 
-        assertFalse(bookList.contains(book3));
-        bookList.addBook(book3);
-        assertTrue(bookList.contains(book3));
+        assertFalse(bookList.contains(book5));
+        bookList.addBook(book5);
+        assertTrue(bookList.contains(book5));
     }
+
+    @Test
+    void testContainsBookSameNameDifferentAuthor() {
+        bookList.addBook(book4);
+        assertTrue(bookList.contains(book4));
+
+        bookList.addBook(book5);
+        assertTrue(bookList.contains(book5));
+    }
+
 
     @Test
     void testRemoveBookFromList() {
