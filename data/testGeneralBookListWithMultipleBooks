@@ -1,0 +1,23 @@
+{"listOfBooks": [
+    {
+        "pages": 328,
+        "author": "George Orwell",
+        "name": "1984",
+        "rating": 5,
+        "status": 1
+    },
+    {
+        "pages": 480,
+        "author": "Jane Austen",
+        "name": "Pride and Prejudice",
+        "rating": 4,
+        "status": 2
+    },
+    {
+        "pages": 607,
+        "author": "J.K Rowling",
+        "name": "Harry Potter",
+        "rating": 5,
+        "status": 3
+    }
+]}

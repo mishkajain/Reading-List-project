@@ -157,7 +157,7 @@ public class ReadingListApp {
         if (listOfBooks.size() == 0) {
             System.out.println("YOUR READING LIST IS EMPTY");
         } else {
-            System.out.println("\nREADING LIST:\n" + listOfBooks.getListOfBooks());
+            System.out.println("\nREADING LIST:\n\n" + listOfBooks.getListOfBooks());
         }
     }
 }
