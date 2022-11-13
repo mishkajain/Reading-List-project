@@ -12,7 +12,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class ReadingListApp {
+import javax.swing.JFrame;
+
+public class ReadingListApp extends JFrame {
     private static final String JSON_STORE = "./data/readingList.json";
     private Scanner input;
     private BookList listOfBooks;
@@ -92,15 +94,15 @@ public class ReadingListApp {
     // MODIFIES: this
     // EFFECTS: Creates a book and adds it to the current reading list
     public void doAddBookToList() {
-        String name;
+        String title;
         String author;
         Integer pages;
         Integer status;
         Integer rating;
 
         System.out.println("Please enter the following details:");
-        System.out.print("Name: ");
-        name = input.next();
+        System.out.print("Title: ");
+        title = input.next();
         System.out.print("Author: ");
         author = input.next();
         System.out.print("Number of pages: ");
@@ -110,7 +112,7 @@ public class ReadingListApp {
         System.out.print("Rating: ");
         rating = input.nextInt();
 
-        newBook = new Book(name, author, pages, status, rating);
+        newBook = new Book(title, author, pages, status, rating);
         if (listOfBooks.contains(newBook)) {
             System.out.println("\nTHIS BOOK IS ALREADY IN YOUR READING LIST!\n");
         } else {
