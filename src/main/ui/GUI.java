@@ -36,12 +36,15 @@ public class GUI extends JFrame implements ActionListener {
     private JButton returnToHomePageButton;
     private JButton addBookToListButton;
 
-    private JLabel readingList = new JLabel("Your Reading List is empty");
+    private JTextArea readingList;// = new JLabel("Your Reading List is empty");
+
     private JLabel title;
     private JLabel author;
     private JLabel pages;
     private JLabel status;
     private JLabel rating;
+    private JLabel addBookMessage;
+    private JLabel emptyLabel;
 
     private JTextField titleText;
     private JTextField authorText;
@@ -52,9 +55,10 @@ public class GUI extends JFrame implements ActionListener {
 
     public GUI() {
         super("Reading List");
+        bookList = new BookList();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         createHomePagePanel();
-        makeReadingListPanel();
+        makeViewReadingListPanel();
         makeAddBookPanel();
 
         JLabel welcomeMessageLabel = new JLabel("Welcome to your Reading List!");
@@ -97,6 +101,12 @@ public class GUI extends JFrame implements ActionListener {
         homePagePanel.setVisible(true);
         setSize(dimension);
         setResizable(false);
+
+
+        readingList = new JTextArea();
+        //readingList.setText("Your Reading List is Empty!");
+        readingList.setEditable(false);
+
     }
 
     public void makeHomePageButtons() {
@@ -143,7 +153,7 @@ public class GUI extends JFrame implements ActionListener {
             System.exit(0);
         } else if (e.getActionCommand().equals("Return")) {
             returnToHomePage();
-        } else if (e.getActionCommand().equals("Add Book")) {
+        } else if (e.getActionCommand().equals("Add")) {
             addBookToReadingList();
         }
     }
@@ -175,18 +185,21 @@ public class GUI extends JFrame implements ActionListener {
     }
 
     private void makeAddBookPanel() {
-        addBookPanel = new JPanel(new GridLayout(6, 2));
-
+        addBookPanel = new JPanel(new GridLayout(7, 2));
         bookInformationLabelAndTextField();
 
-        addBookToListButton = new JButton("Add Book");
-        addBookToListButton.setActionCommand("Add book");
+        addBookMessage = new JLabel();
+        addLabel(addBookMessage, addBookPanel);
+        emptyLabel = new JLabel();
+        addLabel(emptyLabel, addBookPanel);
+
+        addBookToListButton = new JButton("Add");
+        addBookToListButton.setActionCommand("Add");
         addBookToListButton.addActionListener(this);
         addButton(addBookToListButton, addBookPanel);
 
         makeReturnToHomePageButton();
         addButton(returnToHomePageButton, addBookPanel);
-
     }
 
     private void bookInformationLabelAndTextField() {
@@ -212,10 +225,31 @@ public class GUI extends JFrame implements ActionListener {
         addTextField(ratingText, addBookPanel);
     }
 
-    private void addBookToReadingList() {
-        book = new Book(titleText.getText(), authorText.getText(), Integer.parseInt(pagesText.getText()),
-                Integer.parseInt(statusText.getText()), Integer.parseInt(ratingText.getText()));
-        bookList.addBook(book);
+    public void addBookToReadingList() {
+        try {
+            book = new Book(titleText.getText(), authorText.getText(), Integer.valueOf(pagesText.getText()),
+                    Integer.parseInt(statusText.getText()), Integer.parseInt(ratingText.getText()));
+            bookList.addBook(book);
+            readingList.setText(bookList.getListOfBooks());
+            clearTextFields();
+            addBookMessage.setText("Book has been added successfully!");
+        } catch (NumberFormatException e) {
+            addBookMessage.setText("Please try again!");
+            clearTextFields();
+        }
+
+    }
+
+    private void clearTextFields() {
+        titleText.setText("");
+        authorText.setText("");
+        pagesText.setText("");
+        statusText.setText("");
+        ratingText.setText("");
+
+    }
+
+    public void loadReadingList() {
         readingList.setText(bookList.getListOfBooks());
     }
 
@@ -226,15 +260,14 @@ public class GUI extends JFrame implements ActionListener {
         addBookPanel.setVisible(false);
     }
 
-    private void makeReadingListPanel() {
+    private void makeViewReadingListPanel() {
         viewReadingListPanel = new JPanel(new GridBagLayout());
-        JScrollPane scrollPane = new JScrollPane(readingList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        loadReadingList();
+        JScrollPane scrollPane = new JScrollPane(readingList);
         scrollPane.setPreferredSize(new Dimension(400, 500));
         viewReadingListPanel.add(scrollPane);
         makeReturnToHomePageButton();
         addButton(returnToHomePageButton, viewReadingListPanel);
-
     }
 
     private class KeyHandler extends KeyAdapter {
