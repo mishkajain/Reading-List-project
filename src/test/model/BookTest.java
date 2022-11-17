@@ -10,13 +10,15 @@ class BookTest {
     private Book testBook2;
     private Book testBook3;
     private Book testBook4;
+    private Book testBook5;
 
     @BeforeEach
     void runBefore() {
         testBook1 = new Book("Pride and Prejudice", "Jane Austen", 480, 2, 4);
         testBook2 = new Book("1984", "George Orwell", 328, 1, 5);
-        testBook3 = new Book("Harry Potter", "J.K Rowling", 607, 3, 5);
-        testBook4 = new Book("Animal Farm", "George Orwell", 420, 5, 5);
+        testBook3 = new Book("Harry Potter", "J.K Rowling", 607, 3, 3);
+        testBook4 = new Book("Animal Farm", "George Orwell", 420, 5, 2);
+        testBook5 = new Book("The Great Gatsby", "F. Scott Fitzgerald", 208, 3, 1);
     }
 
     @Test
@@ -30,9 +32,14 @@ class BookTest {
         assertEquals("1984", testBook2.getBookName());
         assertEquals(328, testBook2.getNumOfPages());
         assertEquals("New!", testBook2.getBookStatus());
+        assertEquals("⭑⭑⭑⭑⭑", testBook2.getBookRating());
 
         assertEquals("Completed!", testBook3.getBookStatus());
+        assertEquals("⭑⭑⭑", testBook3.getBookRating());
 
         assertEquals("-", testBook4.getBookStatus());
+        assertEquals("⭑⭑", testBook4.getBookRating());
+
+        assertEquals("⭑", testBook5.getBookRating());
     }
 }

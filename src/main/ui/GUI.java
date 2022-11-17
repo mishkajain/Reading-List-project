@@ -76,7 +76,8 @@ public class GUI extends JFrame implements ActionListener {
         addActionListenerToHomePageButtons();
     }
 
-    // First Page users see when running the reading list app
+    // MODIFIES :
+    // EFFECTS : creates the first page users see when they start the reading list app
     // https://docs.oracle.com/javase/8/docs/api/javax/swing/JTextArea.html
     public void createHomePagePanel() {
         homePagePanel = new JPanel(new GridLayout(6, 1));
