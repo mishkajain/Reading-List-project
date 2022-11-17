@@ -40,6 +40,7 @@ public class BookListTest {
         assertTrue(bookList.contains(book1));
         assertTrue(bookList.contains(book2));
         assertTrue(bookList.contains(book3));
+        assertEquals("⭑⭑⭑⭑⭑", bookList.get(1).getBookRating());
     }
 
     @Test
