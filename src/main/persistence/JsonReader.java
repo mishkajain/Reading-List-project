@@ -3,7 +3,6 @@
 
 package persistence;
 
-import exceptions.DuplicateBookException;
 import model.Book;
 import model.BookList;
 import org.json.JSONArray;
@@ -64,10 +63,6 @@ public class JsonReader {
         Integer rating = jsonObject.getInt("rating");
 
         Book book = new Book(name, author, pages, status, rating);
-        try {
-            listOfBooks.addBook(book);
-        } catch (DuplicateBookException e) {
-            System.out.println("Duplicate Book");
-        }
+        listOfBooks.addBook(book);
     }
 }

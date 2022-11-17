@@ -5,7 +5,6 @@ package ui;
 
 import model.Book;
 import model.BookList;
-import exceptions.DuplicateBookException;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
@@ -254,7 +253,7 @@ public class GUI extends JFrame implements ActionListener {
             book = new Book(titleText.getText(), authorText.getText(), Integer.valueOf(pagesText.getText()),
                     Integer.parseInt(statusText.getText()), Integer.parseInt(ratingText.getText()));
             if (bookList.contains(book)) {
-                throw new DuplicateBookException("This book is already in your Reading List!");
+                throw new Exception("This book is already in your Reading List!");
             } else {
                 bookList.addBook(book);
                 readingList.setText(bookList.getListOfBooks());
@@ -267,7 +266,7 @@ public class GUI extends JFrame implements ActionListener {
             addBookMessage.setForeground(Color.red);
             addBookMessage.setText("Please try again!");
             clearTextFields();
-        } catch (DuplicateBookException e) {
+        } catch (Exception e) {
             addBookMessage.setForeground(Color.red);
             addBookMessage.setText("This book is already in your Reading List!");
             clearTextFields();

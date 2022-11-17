@@ -1,6 +1,5 @@
 package persistence;
 
-import exceptions.DuplicateBookException;
 import model.Book;
 import model.BookList;
 import org.junit.jupiter.api.Test;
@@ -53,11 +52,7 @@ public class JsonWriterTest extends JsonTest{
     void testGeneralBookListWithOneBook() {
         try {
             BookList listOfBooks = new BookList();
-            try {
-                listOfBooks.addBook(new Book("1984", "George Orwell", 328, 1, 5));
-            } catch (DuplicateBookException e) {
-                fail("Should not have thrown exception");
-            }
+            listOfBooks.addBook(new Book("1984", "George Orwell", 328, 1, 5));
             JsonWriter writer = new JsonWriter("./data/testGeneralBookListWithOneBook.json");
             writer.open();
             writer.write(listOfBooks);
@@ -77,13 +72,9 @@ public class JsonWriterTest extends JsonTest{
     void testGeneralBookListWithMultipleBooks() {
         try {
             BookList listOfBooks = new BookList();
-            try {
-                listOfBooks.addBook(new Book("1984", "George Orwell", 328, 1, 5));
-                listOfBooks.addBook(new Book("Pride and Prejudice", "Jane Austen", 480, 2, 4));
-                listOfBooks.addBook(new Book("Harry Potter", "J.K Rowling", 607, 3, 5));
-            } catch (DuplicateBookException e) {
-                fail("Should not have thrown exception");
-            }
+            listOfBooks.addBook(new Book("1984", "George Orwell", 328, 1, 5));
+            listOfBooks.addBook(new Book("Pride and Prejudice", "Jane Austen", 480, 2, 4));
+            listOfBooks.addBook(new Book("Harry Potter", "J.K Rowling", 607, 3, 5));
             JsonWriter writer = new JsonWriter("./data/testGeneralBookListWithOneBook.json");
             writer.open();
             writer.write(listOfBooks);

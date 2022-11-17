@@ -3,7 +3,6 @@
 
 package ui;
 
-import exceptions.DuplicateBookException;
 import model.Book;
 import model.BookList;
 import persistence.JsonReader;
@@ -32,6 +31,7 @@ public class ReadingListApp extends JFrame {
     private void runReadingList() {
         boolean exit = false;
         String command;
+        Integer removecCommand;
         input = new Scanner(System.in);
         System.out.println("\nWelcome to your Reading List!");
 
@@ -116,12 +116,8 @@ public class ReadingListApp extends JFrame {
         if (listOfBooks.contains(newBook)) {
             System.out.println("\nTHIS BOOK IS ALREADY IN YOUR READING LIST!\n");
         } else {
-            try {
-                listOfBooks.addBook(newBook);
-                System.out.println("\nBOOK HAS BEEN ADDED SUCCESSFULLY!\n");
-            } catch (DuplicateBookException e) {
-                System.out.println("\nTHIS BOOK IS ALREADY IN YOUR READING LIST!\n");
-            }
+            listOfBooks.addBook(newBook);
+            System.out.println("\nBOOK HAS BEEN ADDED SUCCESSFULLY!\n");
         }
     }
 
