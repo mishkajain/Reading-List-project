@@ -25,7 +25,7 @@ class BookTest {
         assertEquals("Jane Austen", testBook1.getBookAuthor());
         assertEquals(480, testBook1.getNumOfPages());
         assertEquals("In progress...", testBook1.getBookStatus());
-        assertEquals(4, testBook1.getBookRating());
+        assertEquals("⭑⭑⭑⭑", testBook1.getBookRating());
 
         assertEquals("1984", testBook2.getBookName());
         assertEquals(328, testBook2.getNumOfPages());

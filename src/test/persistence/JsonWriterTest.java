@@ -61,7 +61,7 @@ public class JsonWriterTest extends JsonTest{
             JsonReader reader = new JsonReader("./data/testGeneralBookListWithOneBook.json");
             listOfBooks = reader.read();
             assertEquals(1, listOfBooks.getNumberOfBooks());
-            checkBook("1984", "George Orwell", 328, "New!", 5, listOfBooks.get(0));
+            checkBook("1984", "George Orwell", 328, "New!", "⭑⭑⭑⭑⭑", listOfBooks.get(0));
 
         } catch (IOException e) {
             fail("Exception should not have been thrown");
@@ -83,9 +83,9 @@ public class JsonWriterTest extends JsonTest{
             JsonReader reader = new JsonReader("./data/testGeneralBookListWithOneBook.json");
             listOfBooks = reader.read();
             assertEquals(3, listOfBooks.getNumberOfBooks());
-            checkBook("1984", "George Orwell", 328, "New!", 5, listOfBooks.get(0));
-            checkBook("Pride and Prejudice", "Jane Austen", 480, "In progress...", 4, listOfBooks.get(1));
-            checkBook("Harry Potter", "J.K Rowling", 607, "Completed!", 5, listOfBooks.get(2));
+            checkBook("1984", "George Orwell", 328, "New!", "⭑⭑⭑⭑⭑", listOfBooks.get(0));
+            checkBook("Pride and Prejudice", "Jane Austen", 480, "In progress...", "⭑⭑⭑⭑", listOfBooks.get(1));
+            checkBook("Harry Potter", "J.K Rowling", 607, "Completed!", "⭑⭑⭑⭑⭑", listOfBooks.get(2));
 
 
         } catch (IOException e) {

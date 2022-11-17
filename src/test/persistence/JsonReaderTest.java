@@ -40,7 +40,7 @@ public class JsonReaderTest extends JsonTest {
         try {
             BookList listOfBooks = reader.read();
             checkBook("Harry Potter and the Philosopher's Stone", "J.K Rowling", 223,
-                    "In progress...", 4, listOfBooks.get(0));
+                    "In progress...", "⭑⭑⭑⭑", listOfBooks.get(0));
         } catch (IOException e) {
             fail("Couldn't read from file");
         }

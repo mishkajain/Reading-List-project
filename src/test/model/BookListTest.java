@@ -113,7 +113,7 @@ public class BookListTest {
         bookList.removeBook(book2);
         assertEquals(book1.getBookName().concat(" by ").concat(book1.getBookAuthor()).concat("\n").
                         concat("Status: ".concat(book1.getBookStatus().concat("\n".concat("Rating: "
-                                .concat(String.valueOf(book1.getBookRating()) +
+                                .concat(book1.getBookRating() +
                                  "\n====================================\n"))))),
                 bookList.getListOfBooks());
 
@@ -147,11 +147,11 @@ public class BookListTest {
 
         assertEquals(book1.getBookName().concat(" by ").concat(book1.getBookAuthor()).concat("\n").
                 concat("Status: ".concat(book1.getBookStatus().concat("\n".concat("Rating: ".
-                        concat(String.valueOf(book1.getBookRating()) +
+                        concat(book1.getBookRating() +
                                 "\n====================================\n" +
                                 book2.getBookName().concat(" by ").concat(book2.getBookAuthor()).concat("\n").
                                         concat("Status: ".concat(book2.getBookStatus().concat("\n".concat("Rating: ".
-                                                concat(String.valueOf(book2.getBookRating()) +
+                                                concat(book2.getBookRating() +
                                                         "\n====================================\n")))))))))),
                 bookList.getListOfBooks());
 

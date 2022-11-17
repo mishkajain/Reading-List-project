@@ -1,27 +1,28 @@
+
+//https://stackoverflow.com/questions/299495/how-to-add-an-image-to-a-jpanel
+
 package ui;
 
 import model.Book;
 import model.BookList;
+import exceptions.DuplicateBookException;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-
-/*
-    Represents the main window in which the
-    reading list is constructed
- */
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class GUI extends JFrame implements ActionListener {
 
 
     private Book book;
     private BookList bookList;
-    private final String readingListFile = "./data/readingList.json";
-    private Dimension dimension = new Dimension(500, 600);
+    private static final String JSON_STORE = "./data/readingList.json";
+    private Dimension dimension = new Dimension(550, 600);
 
 
     private JPanel homePagePanel;
@@ -36,7 +37,8 @@ public class GUI extends JFrame implements ActionListener {
     private JButton returnToHomePageButton;
     private JButton addBookToListButton;
 
-    private JTextArea readingList;// = new JLabel("Your Reading List is empty");
+    private JTextArea readingList;
+    private ImageIcon imageIcon;
 
     private JLabel title;
     private JLabel author;
@@ -45,6 +47,7 @@ public class GUI extends JFrame implements ActionListener {
     private JLabel rating;
     private JLabel addBookMessage;
     private JLabel emptyLabel;
+    private JLabel bookGif;
 
     private JTextField titleText;
     private JTextField authorText;
@@ -52,6 +55,8 @@ public class GUI extends JFrame implements ActionListener {
     private JTextField statusText;
     private JTextField ratingText;
 
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
 
     public GUI() {
         super("Reading List");
@@ -60,20 +65,47 @@ public class GUI extends JFrame implements ActionListener {
         createHomePagePanel();
         makeViewReadingListPanel();
         makeAddBookPanel();
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
 
-        JLabel welcomeMessageLabel = new JLabel("Welcome to your Reading List!");
+        JLabel welcomeMessageLabel = new JLabel("Welcome to your Reading List!", SwingConstants.CENTER);
         addLabel(welcomeMessageLabel, homePagePanel);
-        makeHomePageButtons();
 
+        makeHomePageButtons();
+        addButtonsToHomeScreen();
+        addActionListenerToHomePageButtons();
+    }
+
+    // First Page users see when running the reading list app
+    // https://docs.oracle.com/javase/8/docs/api/javax/swing/JTextArea.html
+    public void createHomePagePanel() {
+        homePagePanel = new JPanel(new GridLayout(6, 1));
+        homePagePanel.setBackground(Color.LIGHT_GRAY);
+        add(homePagePanel);
+        homePagePanel.setVisible(true);
+        setSize(dimension);
+        setResizable(false);
+
+        readingList = new JTextArea();
+        readingList.setText("Your Reading List is Empty!");
+        readingList.setEditable(false);
+
+    }
+
+    public void makeHomePageButtons() {
+        viewListPanelButton = new JButton("View Reading List");
+        addBookPanelButton = new JButton("Add a Book to Your Reading List");
+        saveListButton = new JButton("Save Reading List to File");
+        loadListButton = new JButton("Load Reading List from File");
+        quitApplication = new JButton("Quit");
+    }
+
+    private void addButtonsToHomeScreen() {
         addButton(viewListPanelButton, homePagePanel);
         addButton(addBookPanelButton, homePagePanel);
         addButton(saveListButton, homePagePanel);
         addButton(loadListButton, homePagePanel);
         addButton(quitApplication, homePagePanel);
-
-        addActionListenerToButton();
-
-
     }
 
     private void addLabel(JLabel label, JPanel panel) {
@@ -87,6 +119,7 @@ public class GUI extends JFrame implements ActionListener {
     }
 
     private void addButton(JButton button, JPanel panel) {
+
         button.setFont(new Font("Arial", Font.BOLD, 12));
         button.setBackground(Color.WHITE);
         panel.add(button);
@@ -94,38 +127,7 @@ public class GUI extends JFrame implements ActionListener {
         setResizable(true);
     }
 
-    public void createHomePagePanel() {
-        homePagePanel = new JPanel();
-        homePagePanel.setBackground(Color.LIGHT_GRAY);
-        add(homePagePanel);
-        homePagePanel.setVisible(true);
-        setSize(dimension);
-        setResizable(false);
-
-
-        readingList = new JTextArea();
-        //readingList.setText("Your Reading List is Empty!");
-        readingList.setEditable(false);
-
-    }
-
-    public void makeHomePageButtons() {
-        viewListPanelButton = new JButton("View Reading List");
-        addBookPanelButton = new JButton("Add a Book to Your Reading List");
-        saveListButton = new JButton("Save Reading List to File");
-        loadListButton = new JButton("Load Reading List from File");
-        quitApplication = new JButton("Quit");
-
-    }
-
-    private void centreOnScreen() {
-    }
-
-    public void addImageToLabel(JLabel j) {
-
-    }
-
-    public void addActionListenerToButton() {
+    public void addActionListenerToHomePageButtons() {
         viewListPanelButton.addActionListener(this);
         addBookPanelButton.addActionListener(this);
         saveListButton.addActionListener(this);
@@ -158,7 +160,7 @@ public class GUI extends JFrame implements ActionListener {
         }
     }
 
-    private void makeReturnToHomePageButton() {
+    private void returnToHomePageButton() {
         returnToHomePageButton = new JButton("Return");
         returnToHomePageButton.setActionCommand("Return");
         returnToHomePageButton.addActionListener(this);
@@ -169,12 +171,33 @@ public class GUI extends JFrame implements ActionListener {
         homePagePanel.setVisible(true);
         viewReadingListPanel.setVisible(false);
         addBookPanel.setVisible(false);
+        saveListButton.setForeground(Color.BLACK);
+        loadListButton.setForeground(Color.BLACK);
     }
 
     private void loadReadingListFromFile() {
+        try {
+            bookList = jsonReader.read();
+            readingList.setText(bookList.getListOfBooks());
+            loadListButton.setForeground(Color.green);
+            saveListButton.setForeground(Color.BLACK);
+        } catch (IOException e) {
+            loadListButton.setForeground(Color.red);
+            saveListButton.setForeground(Color.BLACK);
+        }
     }
 
     private void saveReadingListToFile() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(bookList);
+            jsonWriter.close();
+            saveListButton.setForeground(Color.green);
+            loadListButton.setForeground(Color.BLACK);
+        } catch (FileNotFoundException e) {
+            saveListButton.setForeground(Color.red);
+            loadListButton.setForeground(Color.BLACK);
+        }
     }
 
     private void displayAddBookPanel() {
@@ -190,15 +213,15 @@ public class GUI extends JFrame implements ActionListener {
 
         addBookMessage = new JLabel();
         addLabel(addBookMessage, addBookPanel);
-        emptyLabel = new JLabel();
-        addLabel(emptyLabel, addBookPanel);
+        bookGif = new JLabel(imageIcon);
+        addLabel(bookGif, addBookPanel);
 
         addBookToListButton = new JButton("Add");
         addBookToListButton.setActionCommand("Add");
         addBookToListButton.addActionListener(this);
         addButton(addBookToListButton, addBookPanel);
 
-        makeReturnToHomePageButton();
+        returnToHomePageButton();
         addButton(returnToHomePageButton, addBookPanel);
     }
 
@@ -229,15 +252,38 @@ public class GUI extends JFrame implements ActionListener {
         try {
             book = new Book(titleText.getText(), authorText.getText(), Integer.valueOf(pagesText.getText()),
                     Integer.parseInt(statusText.getText()), Integer.parseInt(ratingText.getText()));
-            bookList.addBook(book);
-            readingList.setText(bookList.getListOfBooks());
-            clearTextFields();
-            addBookMessage.setText("Book has been added successfully!");
+            if (bookList.contains(book)) {
+                throw new DuplicateBookException();
+            } else {
+                bookList.addBook(book);
+                readingList.setText(bookList.getListOfBooks());
+                clearTextFields();
+                addBookMessage.setForeground(Color.green);
+                addBookMessage.setText("Book has been added successfully!");
+                addImage();
+            }
         } catch (NumberFormatException e) {
+            addBookMessage.setForeground(Color.red);
             addBookMessage.setText("Please try again!");
+            clearTextFields();
+        } catch (DuplicateBookException e) {
+            addBookMessage.setForeground(Color.red);
+            addBookMessage.setText("This book is already in your Reading List!");
             clearTextFields();
         }
 
+    }
+
+    // https://stackoverflow.com/questions/4339029/display-animated-gif-on-jpanel
+    // https://stackoverflow.com/questions/6714045/how-to-resize-jlabel-imageicon
+    private void addImage() {
+        ImageIcon imageIcon = new ImageIcon(this.getClass().getResource("giphy.gif"));
+        ImageIcon resizedImageIcon = new ImageIcon(imageIcon.getImage().getScaledInstance(90, 90, Image.SCALE_DEFAULT));
+        //BufferedImage bookPicture = ImageIO.read(new File("./data/giphy.gif"));
+        //Image image = bookPicture.getScaledInstance(50, 50, Image.SCALE_DEFAULT);
+        //imageIcon = new ImageIcon(image);
+        bookGif.setIcon(resizedImageIcon);
+        bookGif.setBounds(5,5,5,5);
     }
 
     private void clearTextFields() {
@@ -260,19 +306,14 @@ public class GUI extends JFrame implements ActionListener {
         addBookPanel.setVisible(false);
     }
 
+    // https://stackoverflow.com/questions/10177183/add-scroll-into-text-area
     private void makeViewReadingListPanel() {
         viewReadingListPanel = new JPanel(new GridBagLayout());
         loadReadingList();
         JScrollPane scrollPane = new JScrollPane(readingList);
         scrollPane.setPreferredSize(new Dimension(400, 500));
         viewReadingListPanel.add(scrollPane);
-        makeReturnToHomePageButton();
+        returnToHomePageButton();
         addButton(returnToHomePageButton, viewReadingListPanel);
-    }
-
-    private class KeyHandler extends KeyAdapter {
-        @Override
-        public void keyPressed(KeyEvent e) {
-        }
     }
 }
