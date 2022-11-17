@@ -254,7 +254,7 @@ public class GUI extends JFrame implements ActionListener {
             book = new Book(titleText.getText(), authorText.getText(), Integer.valueOf(pagesText.getText()),
                     Integer.parseInt(statusText.getText()), Integer.parseInt(ratingText.getText()));
             if (bookList.contains(book)) {
-                throw new DuplicateBookException();
+                throw new DuplicateBookException("This book is already in your Reading List!");
             } else {
                 bookList.addBook(book);
                 readingList.setText(bookList.getListOfBooks());

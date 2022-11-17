@@ -1,5 +1,6 @@
 package model;
 
+import exceptions.DuplicateBookException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.Writable;
@@ -19,15 +20,13 @@ public class BookList implements Writable {
 
     // MODIFIES: this
     // EFFECTS: adds a Book object to the list of books
-    public String addBook(Book book) {
+    public String addBook(Book book) throws DuplicateBookException {
         if (contains(book)) {
-            String bookAlreadyInList = "This book has already been added to your list";
-            return bookAlreadyInList;
-        } else {
-            listOfBooks.add(book);
-            String addedBook = "Book has been added to your list";
-            return addedBook;
+            throw new DuplicateBookException("This book has already been added to your list");
         }
+        listOfBooks.add(book);
+        String addedBook = "Book has been added to your list";
+        return addedBook;
     }
 
     // EFFECTS: returns the number of books in the list of books

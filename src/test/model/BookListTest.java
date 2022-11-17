@@ -1,11 +1,10 @@
 package model;
 
+import exceptions.DuplicateBookException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class BookListTest {
     private BookList bookList;
@@ -29,15 +28,24 @@ public class BookListTest {
 
     @Test
     void testAddBook() {
-        bookList.addBook(book1);
+        try {
+            bookList.addBook(book1);
+        } catch (DuplicateBookException e) {
+            fail("Should not have thrown exception");
+        }
+
         assertTrue(bookList.contains(book1));
     }
 
     @Test
     void testAddMultipleBooks() {
-        bookList.addBook(book1);
-        bookList.addBook(book2);
-        bookList.addBook(book3);
+        try {
+            bookList.addBook(book1);
+            bookList.addBook(book2);
+            bookList.addBook(book3);
+        } catch (DuplicateBookException e) {
+            fail("Should not have thrown exception");
+        }
 
         assertTrue(bookList.contains(book1));
         assertTrue(bookList.contains(book2));
@@ -46,68 +54,107 @@ public class BookListTest {
 
     @Test
     void testAddSameBookMultipleTimes() {
-        bookList.addBook(book1);
-        bookList.addBook(book1);
-        bookList.addBook(book1);
+        try {
+            bookList.addBook(book1);
+            bookList.addBook(book1);
+            fail("Should have thrown exception");
+        } catch (DuplicateBookException e) {
+            // all good
+        }
 
         assertEquals(1, bookList.getNumberOfBooks());
+
+        try {
+            bookList.addBook(book2);
+            bookList.addBook(book2);
+            fail("Should have thrown exception");
+        } catch (DuplicateBookException e) {
+            // all good
+        }
+
+        assertEquals(2, bookList.getNumberOfBooks());
     }
 
     @Test
     void testAddBookWithDifferentNameSameAuthor() {
-        bookList.addBook(book3);
-        bookList.addBook(book4);
-
+        try {
+            bookList.addBook(book3);
+            bookList.addBook(book4);
+        } catch (DuplicateBookException e) {
+            fail("Should not have thrown exception");
+        }
         assertEquals(2, bookList.getNumberOfBooks());
 
     }
 
     @Test
     void testAddBookWithSameNameDifferentAuthor() {
-        bookList.addBook(book4);
-        bookList.addBook(book5);
+        try {
+            bookList.addBook(book4);
+            bookList.addBook(book5);
+        } catch (DuplicateBookException e) {
+            fail("Should not have thrown exception");
+        }
 
         assertEquals(2, bookList.getNumberOfBooks());
     }
 
     @Test
     void testNumberOfBooks() {
-        bookList.addBook(book1);
-        assertEquals(1, bookList.getNumberOfBooks());
-        bookList.addBook(book2);
-        assertEquals(2, bookList.getNumberOfBooks());
-        bookList.addBook(book3);
-        assertEquals(3, bookList.getNumberOfBooks());
+        try {
+            bookList.addBook(book1);
+            assertEquals(1, bookList.getNumberOfBooks());
+            bookList.addBook(book2);
+            assertEquals(2, bookList.getNumberOfBooks());
+            bookList.addBook(book3);
+            assertEquals(3, bookList.getNumberOfBooks());
+        } catch (DuplicateBookException e) {
+            fail("Should not have thrown exception");
+        }
     }
 
     @Test
     void testContainsBook() {
-        bookList.addBook(book1);
-        assertTrue(bookList.contains(book1));
+        try {
+            bookList.addBook(book1);
+            assertTrue(bookList.contains(book1));
 
-        assertFalse(bookList.contains(book2));
-        bookList.addBook(book2);
-        assertTrue(bookList.contains(book2));
+            assertFalse(bookList.contains(book2));
+            bookList.addBook(book2);
+            assertTrue(bookList.contains(book2));
 
-        assertFalse(bookList.contains(book5));
-        bookList.addBook(book5);
-        assertTrue(bookList.contains(book5));
+            assertFalse(bookList.contains(book5));
+            bookList.addBook(book5);
+            assertTrue(bookList.contains(book5));
+        } catch (DuplicateBookException e) {
+            fail("Should not have thrown exception");
+        }
     }
 
     @Test
     void testContainsBookSameNameDifferentAuthor() {
-        bookList.addBook(book4);
-        assertTrue(bookList.contains(book4));
+        try {
+            bookList.addBook(book4);
+            assertTrue(bookList.contains(book4));
 
-        bookList.addBook(book5);
-        assertTrue(bookList.contains(book5));
+            bookList.addBook(book5);
+            assertTrue(bookList.contains(book5));
+        } catch (DuplicateBookException e) {
+            fail("Should not have thrown exception");
+        }
+
+        assertEquals(2, bookList.getNumberOfBooks());
     }
 
 
     @Test
     void testRemoveBookFromList() {
-        bookList.addBook(book1);
-        bookList.addBook(book2);
+        try {
+            bookList.addBook(book1);
+            bookList.addBook(book2);
+        } catch (DuplicateBookException e) {
+            fail("Should not have thrown exception");
+        }
         assertTrue(bookList.contains(book2));
 
         bookList.removeBook(book2);
@@ -123,8 +170,12 @@ public class BookListTest {
 
     @Test
     void testRemoveMultipleBooksFromList() {
-        bookList.addBook(book1);
-        bookList.addBook(book2);
+        try {
+            bookList.addBook(book1);
+            bookList.addBook(book2);
+        } catch (DuplicateBookException e) {
+            fail("Should not have thrown exception");
+        }
 
         bookList.removeBook(book1);
         bookList.removeBook(book2);
@@ -136,14 +187,22 @@ public class BookListTest {
     void testRemoveBookFromListButBookIsNotInTheList() {
         // list is empty
         assertEquals("Your reading list is empty", bookList.removeBook(book1));
-        bookList.addBook(book1);
+        try {
+            bookList.addBook(book1);
+        } catch (DuplicateBookException e) {
+            fail("Should not have thrown exception");
+        }
         assertEquals("Could not find the book in the list", bookList.removeBook(book2));
     }
 
     @Test
     void testGetListOfBooks() {
-        bookList.addBook(book1);
-        bookList.addBook(book2);
+        try {
+            bookList.addBook(book1);
+            bookList.addBook(book2);
+        } catch (DuplicateBookException e) {
+            fail("Should not have thrown exception");
+        }
 
         assertEquals(book1.getBookName().concat(" by ").concat(book1.getBookAuthor()).concat("\n").
                 concat("Status: ".concat(book1.getBookStatus().concat("\n".concat("Rating: ".
@@ -159,8 +218,12 @@ public class BookListTest {
 
     @Test
     void testGetABookFromListOfBooks() {
-        bookList.addBook(book1);
-        bookList.addBook(book2);
+        try {
+            bookList.addBook(book1);
+            bookList.addBook(book2);
+        } catch (DuplicateBookException e) {
+            fail("Should not have thrown exception");
+        }
 
         assertEquals(book2, bookList.get(1));
     }
@@ -169,8 +232,12 @@ public class BookListTest {
     void testSize() {
         assertEquals(0, bookList.size());
 
-        bookList.addBook(book1);
-        bookList.addBook(book2);
+        try {
+            bookList.addBook(book1);
+            bookList.addBook(book2);
+        } catch (DuplicateBookException e) {
+            fail("Should not have thrown exception");
+        }
         assertEquals(2, bookList.size());
     }
 
