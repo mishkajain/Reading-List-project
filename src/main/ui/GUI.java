@@ -16,20 +16,20 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class GUI extends JFrame implements ActionListener {
-
-
     private Book book;
     private BookList bookList;
     private static final String JSON_STORE = "./data/readingList.json";
     private final Dimension dimension = new Dimension(550, 700);
 
-
     private JPanel homePagePanel;
     private JPanel viewReadingListPanel;
     private JPanel addBookPanel;
+
     private JFrame progressBarPopUp;
 
     private JProgressBar progressBar;
+    private JTextArea readingList;
+    private ImageIcon imageIcon;
 
     private JButton viewListPanelButton;
     private JButton addBookPanelButton;
@@ -38,9 +38,6 @@ public class GUI extends JFrame implements ActionListener {
     private JButton quitApplication;
     private JButton returnToHomePageButton;
     private JButton addBookToListButton;
-
-    private JTextArea readingList;
-    private ImageIcon imageIcon;
 
     private JLabel title;
     private JLabel author;
@@ -64,6 +61,9 @@ public class GUI extends JFrame implements ActionListener {
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
 
+    // EFFECTS: Creates the main frame and creates the necessary panels amd sets their visibility appropriately
+    // Positioning of JFrame Referenced from :
+    // https://stackoverflow.com/questions/36544498/how-to-center-jpanel-on-the-screen
     public GUI() {
         super("Reading List");
         bookList = new BookList();
