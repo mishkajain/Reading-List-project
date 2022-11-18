@@ -61,7 +61,7 @@ public class Book implements Writable {
 
     // EFFECTS: returns the current rating of the book
     public String getBookRating() {
-        String rating = "";
+        String rating;
         if (bookRating == 1) {
             rating = "⭑";
         } else if (bookRating == 2) {
@@ -70,7 +70,7 @@ public class Book implements Writable {
             rating = "⭑⭑⭑";
         } else if (bookRating == 4) {
             rating = "⭑⭑⭑⭑";
-        } else if (bookRating == 5) {
+        } else {
             rating = "⭑⭑⭑⭑⭑";
         }
         return rating;
