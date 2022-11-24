@@ -3,13 +3,16 @@ package model;
 import org.json.JSONObject;
 import persistence.Writable;
 
-public class Book implements Writable {
-    private String bookName;                // book name
-    private String bookAuthor;               // author of the book
-    private Integer numOfPages;             // number of pages in the book
-    private Integer bookStatus;             // status of the book ( 1: new, 2 : in progress, 3 : completed)
-    private Integer bookRating;             // Rate the book out of 5
+/*
+* Represents a single Book object
+*/
 
+public class Book implements Writable {
+    private String bookName;                 // book name
+    private String bookAuthor;               // author of the book
+    private Integer numOfPages;              // number of pages in the book
+    private Integer bookStatus;              // status of the book ( 1: new, 2 : in progress, 3 : completed)
+    private Integer bookRating;              // Rate the book out of 5
 
 
     /*

@@ -5,6 +5,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/*
+* Tests for the Book class
+*/
+
 class BookTest {
     private Book testBook1;
     private Book testBook2;

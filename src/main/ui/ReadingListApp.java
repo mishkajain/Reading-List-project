@@ -12,9 +12,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
 
-import javax.swing.JFrame;
+/*
+* Representing the Reading List App which you interact with from the console
+*/
 
-public class ReadingListApp extends JFrame {
+public class ReadingListApp {
     private static final String JSON_STORE = "./data/readingList.json";
     private Scanner input;
     private BookList listOfBooks;

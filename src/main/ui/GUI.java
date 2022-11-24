@@ -14,6 +14,10 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/*
+ * Represents the Reading List Application's main JFrame
+*/
+
 public class GUI extends JFrame implements ActionListener {
     private Book book;
     private BookList bookList;

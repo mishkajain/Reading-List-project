@@ -6,6 +6,10 @@ import persistence.Writable;
 
 import java.util.ArrayList;
 
+/*
+* Represents the List which contains Book objects
+* */
+
 public class BookList implements Writable {
     // Initialising an empty ArrayList with type Book called listOfBooks
     final ArrayList<Book> listOfBooks;

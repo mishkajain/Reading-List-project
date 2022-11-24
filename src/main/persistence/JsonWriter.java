@@ -10,6 +10,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
+/*
+* Representing a writer that writes the contents of BookList to readingList JSON file
+*/
 public class JsonWriter {
     private static final int TAB = 4;
     private PrintWriter writer;
