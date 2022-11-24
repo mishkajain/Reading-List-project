@@ -1,6 +1,3 @@
-
-//https://stackoverflow.com/questions/299495/how-to-add-an-image-to-a-jpanel
-
 package ui;
 
 import model.Book;
@@ -20,12 +17,15 @@ public class GUI extends JFrame implements ActionListener {
     private BookList bookList;
     private static final String JSON_STORE = "./data/readingList.json";
     private final Dimension dimension = new Dimension(550, 700);
+    private Integer command;
+    private Book removingBook;
 
     private JPanel homePagePanel;
     private JPanel viewReadingListPanel;
     private JPanel addBookPanel;
 
     private JFrame progressBarPopUp;
+    private JFrame removeBookFrame;
 
     private JProgressBar progressBar;
     private JTextArea readingList;
@@ -38,6 +38,9 @@ public class GUI extends JFrame implements ActionListener {
     private JButton quitApplication;
     private JButton returnToHomePageButton;
     private JButton addBookToListButton;
+    private JButton removeBookFrameButton;
+    private JButton removeBookFromListButton;
+    private JButton doneRemovingBooksButton;
 
     private JLabel title;
     private JLabel author;
@@ -51,12 +54,14 @@ public class GUI extends JFrame implements ActionListener {
     private JLabel thirdBookGif;
     private JLabel savedBookMessage;
     private JLabel loadedBookMessage;
+    private JLabel bookRemovedLabel;
 
     private JTextField titleText;
     private JTextField authorText;
     private JTextField pagesText;
     private JTextField statusText;
     private JTextField ratingText;
+    private JTextField removeBookText;
 
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
@@ -71,6 +76,8 @@ public class GUI extends JFrame implements ActionListener {
         createHomePagePanel();
         makeViewReadingListPanel();
         makeAddBookPanel();
+        makeRemoveBookFrame();
+
         jsonWriter = new JsonWriter(JSON_STORE);
         jsonReader = new JsonReader(JSON_STORE);
 
@@ -95,7 +102,6 @@ public class GUI extends JFrame implements ActionListener {
 
         readingList = new JTextArea();
         readingList.setEditable(false);
-
     }
 
     // EFFECTS: instantiates the home panel buttons
@@ -171,6 +177,8 @@ public class GUI extends JFrame implements ActionListener {
             displayViewReadingListPanel();
         } else if (e.getActionCommand().equals("Add a Book to Your Reading List")) {
             displayAddBookPanel();
+        } else if (e.getActionCommand().equals("Remove a Book")) {
+            displayRemoveBookFrame();
         } else if (e.getActionCommand().equals("Save Reading List to File")) {
             saveReadingListToFile();
         } else if (e.getActionCommand().equals("Load Reading List from File")) {
@@ -181,6 +189,12 @@ public class GUI extends JFrame implements ActionListener {
             returnToHomePage();
         } else if (e.getActionCommand().equals("Add")) {
             addBookToReadingList();
+        } else if (e.getActionCommand().equals("Remove a Book")) {
+            makeRemoveBookFrame();
+        } else if (e.getActionCommand().equals("Remove")) {
+            removeBookFromReadingList();
+        } else if (e.getActionCommand().equals("Done")) {
+            removeRemoveBookFrame();
         }
     }
 
@@ -209,7 +223,7 @@ public class GUI extends JFrame implements ActionListener {
     private void loadReadingListFromFile() {
         try {
             bookList = jsonReader.read();
-            readingList.setText(bookList.getListOfBooks());
+            loadReadingList();
             loadProgressBar();
 
             loadListButton.setForeground(Color.green);
@@ -335,7 +349,7 @@ public class GUI extends JFrame implements ActionListener {
         addButton(returnToHomePageButton, addBookPanel);
     }
 
-    // REQUIIRES: !(addBookPanel == null)
+    // REQUIRES: !(addBookPanel == null)
     //             all text fields and labels not be null
     // EFFECTS: instantiates all the labels and text fields on the addBookPanel and adds them to the panel
     private void bookInformationLabelAndTextField() {
@@ -364,7 +378,7 @@ public class GUI extends JFrame implements ActionListener {
     // MODIFIES: bookList, readingList
     // EFFECTS: adds the book created by the information taken from the text fields on the addBookPanel
     //          if bookList does not already contain the book. Displays a gif after the book has been added successfully
-    //          and clears all the textfields on the addBookPanel.
+    //          and clears all the text-fields on the addBookPanel.
     public void addBookToReadingList() {
         try {
             book = new Book(titleText.getText(), authorText.getText(), Integer.valueOf(pagesText.getText()),
@@ -373,7 +387,7 @@ public class GUI extends JFrame implements ActionListener {
                 throw new Exception("   This book is already in your Reading List!");
             } else {
                 bookList.addBook(book);
-                readingList.setText(bookList.getListOfBooks());
+                loadReadingList();
                 clearTextFields();
                 addBookMessage.setForeground(Color.BLACK);
                 addBookMessage.setText("             Book has been added successfully!");
@@ -388,15 +402,14 @@ public class GUI extends JFrame implements ActionListener {
             addBookMessage.setText("   This book is already in your Reading List!");
             clearTextFields();
             giphyGif.setVisible(false);
-
         }
-
     }
 
     // EFFECTS: adds an image icon to the given label
     // Referenced from:
     // https://stackoverflow.com/questions/4339029/display-animated-gif-on-jpanel
     // https://stackoverflow.com/questions/6714045/how-to-resize-jlabel-imageicon
+    // https://stackoverflow.com/questions/299495/how-to-add-an-image-to-a-jpanel
     private void addImage(String image, JLabel label) {
         imageIcon = new ImageIcon(this.getClass().getResource(image));
         ImageIcon resizedImageIcon = new ImageIcon(imageIcon.getImage().getScaledInstance(150, 90,
@@ -413,9 +426,11 @@ public class GUI extends JFrame implements ActionListener {
         pagesText.setText("");
         statusText.setText("");
         ratingText.setText("");
+        removeBookText.setText("");
 
     }
 
+    // MODIFIES: readingList
     // EFFECTS: Sets the readingList label to the list of books in the current bookList
     public void loadReadingList() {
         readingList.setText(bookList.getListOfBooks());
@@ -429,6 +444,7 @@ public class GUI extends JFrame implements ActionListener {
         viewReadingListPanel.setVisible(true);
         homePagePanel.setVisible(false);
         addBookPanel.setVisible(false);
+
     }
 
     // EFFECTS: makes the viewReadingListPanel with a scroll pane to display the current reading list
@@ -442,8 +458,73 @@ public class GUI extends JFrame implements ActionListener {
         readingList.setText("Your Reading List is Empty!");
         scrollPane.setBounds(25, 25, 500, 570);
         viewReadingListPanel.add(scrollPane);
+
+        removeBookFrameButton = new JButton("Remove a Book");
+        removeBookFrameButton.setActionCommand("Remove a Book");
+        removeBookFrameButton.addActionListener(this);
+        addButton(removeBookFrameButton, viewReadingListPanel);
+        removeBookFrameButton.setBounds(80, 605, 200, 50);
+
         returnToHomePageButton();
         addButton(returnToHomePageButton, viewReadingListPanel);
-        returnToHomePageButton.setBounds(190, 605, 200, 50);
+        returnToHomePageButton.setBounds(280, 605, 200, 50);
+    }
+
+    // MODIFIES: visibility of removeBookFrame
+    // EFFECTS: displays the frame which allows users to remove books from the reading list
+    private void displayRemoveBookFrame() {
+        removeBookFrame.setVisible(true);
+    }
+
+    // EFFECTS: creates the frame which allows users to remove book
+    private void makeRemoveBookFrame() {
+        removeBookFrame = new JFrame();
+        removeBookFrame.setLayout(null);
+        removeBookFrame.setBounds(500, 500, 350, 225);
+
+
+        removeBookText = new JTextField();
+        removeBookFrame.add(removeBookText);
+        removeBookText.setBounds(50, 30, 100, 50);
+
+        removeBookFromListButton = new JButton("Remove");
+        removeBookFromListButton.setActionCommand("Remove");
+        removeBookFromListButton.addActionListener(this);
+        removeBookFrame.add(removeBookFromListButton);
+        removeBookFromListButton.setBounds(170, 30, 130, 50);
+
+        bookRemovedLabel = new JLabel();
+        removeBookFrame.add(bookRemovedLabel);
+        bookRemovedLabel.setBounds(90, 80, 300, 50);
+
+        doneRemovingBooksButton = new JButton("Done");
+        doneRemovingBooksButton.addActionListener(this);
+        doneRemovingBooksButton.setActionCommand("Done");
+        removeBookFrame.add(doneRemovingBooksButton);
+        doneRemovingBooksButton.setBounds(130, 130, 100, 50);
+    }
+
+    // MODIFIES: readingList
+    // EFFECTS: removes the book at the selected index, if there is no book at the given index or no input is given
+    //          throws an exception
+    private void removeBookFromReadingList() {
+        try {
+            command = Integer.valueOf(removeBookText.getText()) - 1;
+            removingBook = bookList.get(command);
+            bookList.removeBook(removingBook);
+            bookRemovedLabel.setText("Book Successfully Removed");
+            loadReadingList();
+            clearTextFields();
+        } catch (Exception e) {
+            bookRemovedLabel.setText("Invalid Entry! Please Try Again");
+            clearTextFields();
+        }
+    }
+
+    // MODIFIES: visibility of removeBookFrame
+    // EFFECTS: sets the visibility of the removeBookFrame to false (removes it from being seen)
+    private void removeRemoveBookFrame() {
+        removeBookFrame.setVisible(false);
+        clearTextFields();
     }
 }

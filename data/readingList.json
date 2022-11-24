@@ -1,7 +1,7 @@
 {"listOfBooks": [{
-    "pages": 3,
-    "author": "asdf",
-    "name": "asdf",
-    "rating": 2,
+    "pages": 320,
+    "author": "JK Rowling",
+    "name": "Harry Potter",
+    "rating": 4,
     "status": 2
 }]}
