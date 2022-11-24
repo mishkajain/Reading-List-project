@@ -26,6 +26,7 @@ public class BookList implements Writable {
         } else {
             listOfBooks.add(book);
             String addedBook = "Book has been added to your list";
+            EventLog.getInstance().logEvent(new Event("Added book: '" + book.getBookName() + "' to Reading List"));
             return addedBook;
         }
     }
@@ -59,6 +60,7 @@ public class BookList implements Writable {
             return emptyReadingList;
         } else if (listOfBooks.contains(book)) {
             listOfBooks.remove(book);
+            EventLog.getInstance().logEvent(new Event("Removed book: '" + book.getBookName() + "' from Reading List"));
             return bookIsThere;
         }
         return bookIsNotThere;
@@ -93,7 +95,7 @@ public class BookList implements Writable {
         return json;
     }
 
-    // EFFECTS: returns things in this workroom as a JSON array
+    // EFFECTS: returns things in this BookList as a JSON array
     private JSONArray listOfBooksToJson() {
         JSONArray jsonArray = new JSONArray();
 
@@ -101,6 +103,7 @@ public class BookList implements Writable {
             jsonArray.put(book.toJson());
         }
 
+        EventLog.getInstance().logEvent(new Event("Saved Reading List to file"));
         return jsonArray;
     }
 }

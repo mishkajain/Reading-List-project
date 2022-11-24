@@ -2,14 +2,16 @@ package ui;
 
 import model.Book;
 import model.BookList;
+import model.Event;
+import model.EventLog;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 
 public class GUI extends JFrame implements ActionListener {
@@ -19,6 +21,7 @@ public class GUI extends JFrame implements ActionListener {
     private final Dimension dimension = new Dimension(550, 700);
     private Integer command;
     private Book removingBook;
+    private FileWriter fw;
 
     private JPanel homePagePanel;
     private JPanel viewReadingListPanel;
@@ -72,7 +75,7 @@ public class GUI extends JFrame implements ActionListener {
     public GUI() {
         super("Reading List");
         bookList = new BookList();
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        windowClosingAction();
         createHomePagePanel();
         makeViewReadingListPanel();
         makeAddBookPanel();
@@ -184,7 +187,7 @@ public class GUI extends JFrame implements ActionListener {
         } else if (e.getActionCommand().equals("Load Reading List from File")) {
             loadReadingListFromFile();
         } else if (e.getActionCommand().equals("Quit")) {
-            System.exit(0);
+            quitApp();
         } else if (e.getActionCommand().equals("Return")) {
             returnToHomePage();
         } else if (e.getActionCommand().equals("Add")) {
@@ -198,7 +201,35 @@ public class GUI extends JFrame implements ActionListener {
         }
     }
 
-    // EFFECTS: creates and sets the action for the return button
+    // EFFECTS: calls on the printLog method before exiting the system
+    private void quitApp() {
+        printLog(EventLog.getInstance());
+        System.exit(0);
+    }
+
+    // EFFECTS: if the user closes the window without using the quit button,
+    //          calls on the printLog method before exiting the system
+    // Referenced from:
+    // https://stackoverflow.com/questions/7073412/awt-window-close-listener-event
+    private void windowClosingAction() {
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                printLog(EventLog.getInstance());
+                System.exit(0);
+            }
+        });
+    }
+
+    // EFFECTS: prints out the event log onto the console
+    public void printLog(EventLog el) {
+        for (Event next : el) {
+            System.out.println(next.toString());
+            System.out.println("\n");
+        }
+    }
+
+    // EFFECTS: creates and sets the action command for the return button
     private void returnToHomePageButton() {
         returnToHomePageButton = new JButton("Return");
         returnToHomePageButton.setActionCommand("Return");
@@ -207,7 +238,7 @@ public class GUI extends JFrame implements ActionListener {
 
     // MODIFIES: visibility of homePagePanel, viewReadingListPanel,
     // addBookPanel, saveListButton, loadListButton, addBookMessage, giphyGif
-    // EFFECTS: returns to the home page
+    // EFFECTS: returns to the home page panel
     private void returnToHomePage() {
         homePagePanel.setVisible(true);
         viewReadingListPanel.setVisible(false);
@@ -219,7 +250,7 @@ public class GUI extends JFrame implements ActionListener {
     }
 
     // MODIFIES: readingList (label)
-    // EFFECTS: loads and displays bookList that was saved to file in the readingList label
+    // EFFECTS: loads the bookList that was saved to file and displays it in the readingList text area
     private void loadReadingListFromFile() {
         try {
             bookList = jsonReader.read();
@@ -234,6 +265,9 @@ public class GUI extends JFrame implements ActionListener {
         }
     }
 
+    // EFFECTS: Creates a new pop-up window to display an animated loading
+    //          progress bar to indicate that the reading list has been loaded from file
+    //          and displays a message to indicate it has been loaded successfully
     // gif taken from:
     // https://giphy.com/stickers/book-books-reading-3hoLIVAJYkz6T0Ichp
     private void loadProgressBar() {
@@ -277,7 +311,8 @@ public class GUI extends JFrame implements ActionListener {
     }
 
     // EFFECTS: Creates a new pop-up window to display an animated loading
-    //          progress bar to display the loaded/saved book messages
+    //          progress bar to indicate that the reading list has been saved to file
+    //          and displays a message to indicate it has been saved successfully
     // https://giphy.com/stickers/transparent-jP4tBUskCa8nt7FrrK
     private void saveProgressBar() {
         progressBarPopUp = new JFrame();
@@ -302,7 +337,7 @@ public class GUI extends JFrame implements ActionListener {
     }
 
     // MODIFIES: progressBar
-    // EFFECTS: fills the progress bar
+    // EFFECTS: animates the progress bar to fill as indicated
     // https://www.youtube.com/watch?v=JEI-fcfnFkc
     public void fillProgressBar() {
         int counter = 0;
@@ -405,7 +440,7 @@ public class GUI extends JFrame implements ActionListener {
         }
     }
 
-    // EFFECTS: adds an image icon to the given label
+    // EFFECTS: creates an image icon from the given image and adds the image icon to the given label
     // Referenced from:
     // https://stackoverflow.com/questions/4339029/display-animated-gif-on-jpanel
     // https://stackoverflow.com/questions/6714045/how-to-resize-jlabel-imageicon
@@ -476,7 +511,7 @@ public class GUI extends JFrame implements ActionListener {
         removeBookFrame.setVisible(true);
     }
 
-    // EFFECTS: creates the frame which allows users to remove book
+    // EFFECTS: creates a new JFrame which allows users to remove a book
     private void makeRemoveBookFrame() {
         removeBookFrame = new JFrame();
         removeBookFrame.setLayout(null);
@@ -506,7 +541,7 @@ public class GUI extends JFrame implements ActionListener {
 
     // MODIFIES: readingList
     // EFFECTS: removes the book at the selected index, if there is no book at the given index or no input is given
-    //          throws an exception
+    //          catches teh exception and sets the label to display and error message and asks the user to try again
     private void removeBookFromReadingList() {
         try {
             command = Integer.valueOf(removeBookText.getText()) - 1;

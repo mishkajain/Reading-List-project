@@ -25,13 +25,22 @@ how I can reach my target can be very helpful in creating better habits.
 - As a user, I want to be able to view the list of books in my reading list
 - As a user, I want to be able to remove a book from my reading list
 - As a user, I want to be able to rate all the books from 1 to 5
+- As a user, I want to be able to indicate my reading status for each book from 1 to 3 (1 = A new book; 2 = In progress; 3 = Completed)
 - As a user, I want to be able to save my reading list to file
 - As a user, I want to be able to load my reading list from file
 
-[comment]: <> (
-- As a user, I want to be able to make daily, weekly or monthly reading goals
-- As a user, I want to be able to set book specific targets
-- As a user, I want to be able to view how much progress I have made in
-  completing a goal/target
-- As a user, I want to be able to see how much I need to read per day to reach
-  a target or complete a goal )
+### Phase 4 - Task 2
+Thu Nov 24 12:40:30 PST 2022
+Added book: 'Harry Potter' to Reading List
+
+
+Thu Nov 24 12:40:49 PST 2022
+Added book: 'Harry Potter 2' to Reading List
+
+
+Thu Nov 24 12:40:55 PST 2022
+Removed book: 'Harry Potter 2' from Reading List
+
+
+Thu Nov 24 12:40:58 PST 2022
+Saved Reading List to file
