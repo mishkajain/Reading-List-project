@@ -13,7 +13,6 @@ import java.util.ArrayList;
 public class BookList implements Writable {
     // Initialising an empty ArrayList with type Book called listOfBooks
     final ArrayList<Book> listOfBooks;
-    private String list = "";
 
     // EFFECTS: Creates a new an empty ArrayList with type Book called listOfBooks
     public BookList() {
@@ -23,15 +22,14 @@ public class BookList implements Writable {
 
     // MODIFIES: this
     // EFFECTS: adds a Book object to the list of books
+    //          logs an event indicating that a book has been added to BookList
     public String addBook(Book book) {
         if (contains(book)) {
-            String bookAlreadyInList = "This book has already been added to your list";
-            return bookAlreadyInList;
+            return "This book has already been added to your list";
         } else {
             listOfBooks.add(book);
-            String addedBook = "Book has been added to your list";
             EventLog.getInstance().logEvent(new Event("Added book: '" + book.getBookName() + "' to Reading List"));
-            return addedBook;
+            return "Book has been added to your list";
         }
     }
 
@@ -42,19 +40,20 @@ public class BookList implements Writable {
 
     // EFFECTS: returns a string containing the list of books added to the list of books
     public String getListOfBooks() {
-        list = "";
+        String list = "";
         for (int i = 0; i < listOfBooks.size(); i++) {
-            list = list + listOfBooks.get(i).getBookName() + " by "
-                    + listOfBooks.get(i).getBookAuthor()
-                    + "\n" + "Status: " + listOfBooks.get(i).getBookStatus()
-                    + "\n" + "Rating: " + listOfBooks.get(i).getBookRating()
-                    + "\n====================================\n";
+            list = list.concat(listOfBooks.get(i).getBookName().concat(" by "
+                    .concat(listOfBooks.get(i).getBookAuthor()
+                            .concat("\n".concat("Status: ".concat(listOfBooks.get(i).getBookStatus()
+                                    .concat("\n".concat("Rating: ".concat(listOfBooks.get(i).getBookRating()
+                                            .concat("\n====================================\n"))))))))));
         }
         return list;
     }
 
     // MODIFIES: this
     // EFFECTS: removes a book from the list of books
+    //          logs an event indicating that a book has been removed from BookList
     public String removeBook(Book book) {
         String bookIsThere = "Book removed from list";
         String bookIsNotThere = "Could not find the book in the list";
@@ -100,6 +99,7 @@ public class BookList implements Writable {
     }
 
     // EFFECTS: returns things in this BookList as a JSON array
+    //          logs an event indicating that a BookList has been saved to file
     private JSONArray listOfBooksToJson() {
         JSONArray jsonArray = new JSONArray();
 

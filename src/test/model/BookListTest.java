@@ -3,6 +3,9 @@ package model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class BookListTest {
@@ -13,6 +16,7 @@ public class BookListTest {
     private Book book4;
     private Book book5;
     private Book book6;
+    EventLog el = EventLog.getInstance();
 
     @BeforeEach
     void runBefore() {
@@ -23,6 +27,8 @@ public class BookListTest {
         book4 = new Book("Harry Potter and the Prisoner of Azkaban", "J.K Rowling", 607, 2, 5);
         book5 = new Book("Harry Potter and the Prisoner of Azkaban", "JK Rowling", 607, 2, 5);
         book6 = new Book("Harry Potter and the Prisoner of Azkaban", "JK Rowling", 607, 2, 5);
+
+        el.clear();
     }
 
     @Test
@@ -65,6 +71,17 @@ public class BookListTest {
         bookList.addBook(book5);
 
         assertEquals(2, bookList.getNumberOfBooks());
+    }
+
+    @Test
+    void testEventLogForAddBook() {
+        List<Event> l = new ArrayList<>();
+        bookList.addBook(book1);
+        for (Event event : el) {
+            l.add(event);
+        }
+        assertEquals("Event log cleared.", l.get(0).getDescription());
+        assertEquals("Added book: 'Pride and Prejudice' to Reading List", l.get(1).getDescription());
     }
 
     @Test
@@ -153,6 +170,19 @@ public class BookListTest {
                                                         "\n====================================\n")))))))))),
                 bookList.getListOfBooks());
 
+    }
+
+    @Test
+    void testEventLogForRemoveBook() {
+        List<Event> l = new ArrayList<>();
+        bookList.addBook(book1);
+        bookList.removeBook(book1);
+        for (Event event : el) {
+            l.add(event);
+        }
+        assertEquals("Event log cleared.", l.get(0).getDescription());
+        assertEquals("Added book: 'Pride and Prejudice' to Reading List", l.get(1).getDescription());
+        assertEquals("Removed book: 'Pride and Prejudice' from Reading List", l.get(2).getDescription());
     }
 
     @Test
