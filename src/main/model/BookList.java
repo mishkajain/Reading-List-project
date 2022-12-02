@@ -23,13 +23,11 @@ public class BookList implements Writable {
     // MODIFIES: this
     // EFFECTS: adds a Book object to the list of books
     //          logs an event indicating that a book has been added to BookList
-    public String addBook(Book book) {
-        if (contains(book)) {
-            return "This book has already been added to your list";
-        } else {
+    public void addBook(Book book) {
+        if (!contains(book)) {
             listOfBooks.add(book);
-            EventLog.getInstance().logEvent(new Event("Added book: '" + book.getBookName() + "' to Reading List"));
-            return "Book has been added to your list";
+            EventLog.getInstance().logEvent(new Event("Added book: '" + book.getBookName()
+                    + "' to Reading List"));
         }
     }
 
@@ -41,13 +39,14 @@ public class BookList implements Writable {
     // EFFECTS: returns a string containing the list of books added to the list of books
     public String getListOfBooks() {
         String list = "";
-        for (int i = 0; i < listOfBooks.size(); i++) {
-            list = list.concat(listOfBooks.get(i).getBookName().concat(" by "
-                    .concat(listOfBooks.get(i).getBookAuthor()
-                            .concat("\n".concat("Status: ".concat(listOfBooks.get(i).getBookStatus()
-                                    .concat("\n".concat("Rating: ".concat(listOfBooks.get(i).getBookRating()
-                                            .concat("\n====================================\n"))))))))));
+        for (Book b : listOfBooks) {
+            list = list.concat(b.getBookName().concat(" by ".concat(b.getBookAuthor().concat("\n"
+                    .concat("Pages: ".concat(String.valueOf(b.getNumOfPages()).concat("\n".concat("Status: "
+                    .concat(b.getBookStatus().concat("\n".concat("Rating: ".concat(b.getBookRating()
+                            .concat("\n-------------------------------------------------------------\n")))))))))))));
+
         }
+
         return list;
     }
 
@@ -63,7 +62,8 @@ public class BookList implements Writable {
             return emptyReadingList;
         } else if (listOfBooks.contains(book)) {
             listOfBooks.remove(book);
-            EventLog.getInstance().logEvent(new Event("Removed book: '" + book.getBookName() + "' from Reading List"));
+            EventLog.getInstance().logEvent(new Event("Removed book: '" + book.getBookName()
+                    + "' from Reading List"));
             return bookIsThere;
         }
         return bookIsNotThere;
@@ -72,9 +72,9 @@ public class BookList implements Writable {
     // EFFECTS: checks if the list of books contains a particular book
     public boolean contains(Book book) {
         boolean found = false;
-        for (int i = 0; i < listOfBooks.size(); i++) {
-            if (listOfBooks.get(i).getBookName().equals(book.getBookName())) {
-                if (listOfBooks.get(i).getBookAuthor().equals(book.getBookAuthor())) {
+        for (Book b : listOfBooks) {
+            if (b.getBookName().equals(book.getBookName())) {
+                if (b.getBookAuthor().equals(book.getBookAuthor())) {
                     found = true;
                     break;
                 }

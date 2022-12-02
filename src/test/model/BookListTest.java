@@ -15,7 +15,6 @@ public class BookListTest {
     private Book book3;
     private Book book4;
     private Book book5;
-    private Book book6;
     EventLog el = EventLog.getInstance();
 
     @BeforeEach
@@ -26,7 +25,6 @@ public class BookListTest {
         book3 = new Book("Harry Potter and the Deathly Hallows", "J.K Rowling", 607, 2, 5);
         book4 = new Book("Harry Potter and the Prisoner of Azkaban", "J.K Rowling", 607, 2, 5);
         book5 = new Book("Harry Potter and the Prisoner of Azkaban", "JK Rowling", 607, 2, 5);
-        book6 = new Book("Harry Potter and the Prisoner of Azkaban", "JK Rowling", 607, 2, 5);
 
         el.clear();
     }
@@ -126,10 +124,11 @@ public class BookListTest {
         assertTrue(bookList.contains(book2));
 
         bookList.removeBook(book2);
-        assertEquals(book1.getBookName().concat(" by ").concat(book1.getBookAuthor()).concat("\n").
-                        concat("Status: ".concat(book1.getBookStatus().concat("\n".concat("Rating: "
-                                .concat(book1.getBookRating() +
-                                 "\n====================================\n"))))),
+        assertEquals(book1.getBookName().concat(" by ").concat(book1.getBookAuthor()).concat("\n")
+                        .concat("Pages: ".concat(String.valueOf(book1.getNumOfPages()).concat("\n"
+                                .concat("Status: ".concat(book1.getBookStatus().concat("\n".concat("Rating: "
+                                        .concat(book1.getBookRating()
+                                                .concat("\n-------------------------------------------------------------\n"))))))))),
                 bookList.getListOfBooks());
 
         assertFalse(bookList.contains(book2));
@@ -160,14 +159,17 @@ public class BookListTest {
         bookList.addBook(book1);
         bookList.addBook(book2);
 
-        assertEquals(book1.getBookName().concat(" by ").concat(book1.getBookAuthor()).concat("\n").
-                concat("Status: ".concat(book1.getBookStatus().concat("\n".concat("Rating: ".
-                        concat(book1.getBookRating() +
-                                "\n====================================\n" +
-                                book2.getBookName().concat(" by ").concat(book2.getBookAuthor()).concat("\n").
-                                        concat("Status: ".concat(book2.getBookStatus().concat("\n".concat("Rating: ".
-                                                concat(book2.getBookRating() +
-                                                        "\n====================================\n")))))))))),
+        assertEquals(book1.getBookName().concat(" by ").concat(book1.getBookAuthor()).concat("\n")
+                        .concat("Pages: ".concat(String.valueOf(book1.getNumOfPages()).concat("\n".concat("Status: "
+                                .concat(book1.getBookStatus().concat("\n".concat("Rating: ".concat(book1.getBookRating()
+                                        .concat("\n-------------------------------------------------------------\n"
+                                                .concat(book2.getBookName().concat(" by ").concat(book2.getBookAuthor())
+                                                        .concat("\n".concat("Pages: ".concat(String.valueOf(book2.getNumOfPages())
+                                                                .concat("\n").concat("Status: "
+                                                                        .concat(book2.getBookStatus().concat("\n"
+                                                                                .concat("Rating: "
+                                                                                        .concat(book2.getBookRating()
+                                                                                                .concat("\n-------------------------------------------------------------\n"))))))))))))))))))),
                 bookList.getListOfBooks());
 
     }

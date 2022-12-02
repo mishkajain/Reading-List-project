@@ -11,7 +11,7 @@ public class Book implements Writable {
     private String bookName;                 // book name
     private String bookAuthor;               // author of the book
     private Integer numOfPages;              // number of pages in the book
-    private Integer bookStatus;              // status of the book ( 1: new, 2 : in progress, 3 : completed)
+    private Integer bookStatus;              // status of the book ( 1: new, 2: in progress, 3: completed)
     private Integer bookRating;              // Rate the book out of 5
 
 
@@ -19,7 +19,7 @@ public class Book implements Writable {
     * REQUIRES: name has a non-zero length
     *           author has a non-zero length
     *           pages >= 1
-    *           status must be either 1 2 or 3
+    *           status must be either 1, 2 or 3
     *           rating must be a number between 1 and 5
     * EFFECTS: creates a book with bookName (name), bookAuthor (author), the number of pages in the book (pages),
     *          bookStatus (status) and bookRating (rating)

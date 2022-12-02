@@ -33,7 +33,6 @@ public class ReadingListApp {
     private void runReadingList() {
         boolean exit = false;
         String command;
-        Integer removecCommand;
         input = new Scanner(System.in);
         System.out.println("\nWelcome to your Reading List!");
 

@@ -22,10 +22,11 @@ how I can reach my target can be very helpful in creating better habits.
 ## User Stories
 
 - As a user, I want to be able to add a book to my reading list 
-- As a user, I want to be able to view the list of books in my reading list
-- As a user, I want to be able to remove a book from my reading list
 - As a user, I want to be able to rate all the books from 1 to 5
 - As a user, I want to be able to indicate my reading status for each book from 1 to 3 (1 = A new book; 2 = In progress; 3 = Completed)
+- As a user, I want to be able to assign how many pages each book has
+- As a user, I want to be able to view the list of books in my reading list
+- As a user, I want to be able to remove a book from my reading list
 - As a user, I want to be able to save my reading list to file
 - As a user, I want to be able to load my reading list from file
 
@@ -44,3 +45,14 @@ Removed book: 'Harry Potter 2' from Reading List
 
 Thu Nov 24 12:40:58 PST 2022
 Saved Reading List to file
+
+### Phase 4 - Task 3
+- Refactor the GUI class in order to: 
+  - reduce coupling between GUI class and the Book class (number of dependencies it has on the Book class)
+  - reduce repetitive tasks by method refactoring (eg. a common method for the saveProgressBar and loadProgressBar 
+  methods; the only difference between these methods is the message and image which pops up on the frame)
+  - improve cohesion by splitting the class into several classes which have a single-focused purpose 
+  (eg. creating a single-focused class for the addBookPanel or removeBookPanel, etc) 
+  (perhaps also implement an abstract class for those several classes to extend so that the common functionality 
+  can be shared, and we can avoid repetition within the code)
+

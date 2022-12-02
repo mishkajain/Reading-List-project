@@ -11,7 +11,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 
 /*
@@ -21,11 +20,12 @@ import java.io.IOException;
 public class GUI extends JFrame implements ActionListener {
     private Book book;
     private BookList bookList;
+    private final JsonWriter jsonWriter;
+    private final JsonReader jsonReader;
     private static final String JSON_STORE = "./data/readingList.json";
     private final Dimension dimension = new Dimension(550, 700);
     private Integer command;
     private Book removingBook;
-    private FileWriter fw;
 
     private JPanel homePagePanel;
     private JPanel viewReadingListPanel;
@@ -69,9 +69,6 @@ public class GUI extends JFrame implements ActionListener {
     private JTextField statusText;
     private JTextField ratingText;
     private JTextField removeBookText;
-
-    private JsonWriter jsonWriter;
-    private JsonReader jsonReader;
 
     // EFFECTS: Creates the main frame and creates the necessary panels amd sets their visibility appropriately
     // Positioning of JFrame Referenced from :
@@ -548,7 +545,7 @@ public class GUI extends JFrame implements ActionListener {
     //          catches teh exception and sets the label to display and error message and asks the user to try again
     private void removeBookFromReadingList() {
         try {
-            command = Integer.valueOf(removeBookText.getText()) - 1;
+            command = Integer.parseInt(removeBookText.getText()) - 1;
             removingBook = bookList.get(command);
             bookList.removeBook(removingBook);
             bookRemovedLabel.setText("Book Successfully Removed");
