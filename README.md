@@ -47,12 +47,13 @@ Thu Nov 24 12:40:58 PST 2022
 Saved Reading List to file
 
 ### Phase 4 - Task 3
-- Refactor the GUI class in order to: 
-  - reduce coupling between GUI class and the Book class (number of dependencies it has on the Book class)
-  - reduce repetitive tasks by method refactoring (eg. a common method for the saveProgressBar and loadProgressBar 
+- Reduce coupling between GUI class and the Book class (number of dependencies it has on the Book class) 
+- Reduce repetitive tasks in the GUI class by method refactoring (e.g. a common method for the saveProgressBar and loadProgressBar 
   methods; the only difference between these methods is the message and image which pops up on the frame)
-  - improve cohesion by splitting the class into several classes which have a single-focused purpose 
-  (eg. creating a single-focused class for the addBookPanel or removeBookPanel, etc) 
-  (perhaps also implement an abstract class for those several classes to extend so that the common functionality 
-  can be shared, and we can avoid repetition within the code)
-
+- Improve cohesion within the GUI class by splitting the class into several classes which have a single-focused purpose 
+  (e.g. creating a single-focused class for the addBookPanel or removeBookPanel, etc) 
+  - Create an abstract class to extract the duplication that will surely be within those classes to so that the common 
+  functionality can be shared, and it will improve cohesion within those classes.
+- Add exception handling to manage the errors. This would help in creating a hierarchy and allow the code to catch the most specific 
+exceptions (errors) first. The current way errors are handled within this project is not very efficient and adding exception handling 
+would assist in separating the normal code within my project and the error-handling code, as well as reducing repetition.
